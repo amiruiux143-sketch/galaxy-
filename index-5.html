@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GALAXY PRO - Professional Crypto Terminal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="terminal-container">
+        <header class="terminal-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-rocket"></i>
+                    <span class="logo-text">GALAXY PRO</span>
+                </div>
+                <div class="connection-status" id="connectionStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="global-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Market Cap</span>
+                        <span class="stat-value" id="marketCap">$0.00T</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">24h Volume</span>
+                        <span class="stat-value" id="volume24h">$0.00B</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">BTC Dominance</span>
+                        <span class="stat-value" id="btcDominance">0.00%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="settings-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="terminal-body">
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-view="markets">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Markets</span>
+                    </button>
+                    <button class="nav-item" data-view="portfolio">
+                        <i class="fas fa-wallet"></i>
+                        <span>Portfolio</span>
+                    </button>
+                    <button class="nav-item" data-view="news">
+                        <i class="fas fa-newspaper"></i>
+                        <span>News</span>
+                    </button>
+                    <button class="nav-item" data-view="analytics">
+                        <i class="fas fa-brain"></i>
+                        <span>Analytics</span>
+                    </button>
+                </nav>
+
+                <div class="sentiment-widget">
+                    <h3 class="widget-title">Fear & Greed Index</h3>
+                    <div class="sentiment-gauge">
+                        <div class="gauge-circle" id="sentimentGauge">
+                            <div class="gauge-value" id="sentimentValue">--</div>
+                        </div>
+                        <div class="gauge-label" id="sentimentLabel">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3 class="widget-title">Quick Stats</h3>
+                    <div class="quick-stat-item">
+                        <span class="qs-label">Active Pairs</span>
+                        <span class="qs-value" id="activePairs">0</span>
+                    </div>
+                    <div class="quick-stat-item">
+                        <span class="qs-label">Gainers</span>
+                        <span class="qs-value positive" id="gainers">0</span>
+                    </div>
+                    <div class="quick-stat-item">
+                        <span class="qs-label">Losers</span>
+                        <span class="qs-value negative" id="losers">0</span>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="market-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search pairs...">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="gainers">Gainers</button>
+                        <button class="filter-btn" data-filter="losers">Losers</button>
+                        <button class="filter-btn" data-filter="volume">High Volume</button>
+                    </div>
+                </div>
+
+                <div class="market-table-container">
+                    <table class="market-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="symbol">
+                                    Symbol
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-sort="price">
+                                    Price
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-sort="change">
+                                    24h Change
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-sort="volume">
+                                    Volume
+                                    <i class="fas fa-sort"></i>
+                                </th>
+                                <th>Chart</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marketTableBody">
+                            <tr class="skeleton-row">
+                                <td><div class="skeleton"></div></td>
+                                <td><div class="skeleton"></div></td>
+                                <td><div class="skeleton"></div></td>
+                                <td><div class="skeleton"></div></td>
+                                <td><div class="skeleton"></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+
+            <div class="details-panel" id="detailsPanel">
+                <div class="panel-header">
+                    <h2 class="panel-title" id="selectedPair">Select a pair</h2>
+                    <button class="close-panel" id="closePanel">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="panel-content">
+                    <div class="price-display">
+                        <div class="current-price" id="currentPrice">$0.00</div>
+                        <div class="price-change" id="priceChange">0.00%</div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+
+                    <div class="orderbook-container">
+                        <h3 class="section-title">Order Book</h3>
+                        <div class="orderbook">
+                            <div class="orderbook-side asks">
+                                <div class="orderbook-header">
+                                    <span>Price</span>
+                                    <span>Amount</span>
+                                    <span>Total</span>
+                                </div>
+                                <div class="orderbook-rows" id="asksRows"></div>
+                            </div>
+                            <div class="spread-info" id="spreadInfo">
+                                <span class="spread-label">Spread</span>
+                                <span class="spread-value">0.00%</span>
+                            </div>
+                            <div class="orderbook-side bids">
+                                <div class="orderbook-rows" id="bidsRows"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trade-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">24h High</span>
+                            <span class="stat-value" id="high24h">$0.00</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">24h Low</span>
+                            <span class="stat-value" id="low24h">$0.00</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">24h Volume</span>
+                            <span class="stat-value" id="pairVolume">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="news-panel" id="newsPanel">
+            <div class="news-header">
+                <h3>Latest Crypto News</h3>
+                <button class="refresh-news" id="refreshNews">
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+            <div class="news-list" id="newsList">
+                <div class="news-skeleton">
+                    <div class="skeleton"></div>
+                    <div class="skeleton"></div>
+                    <div class="skeleton"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
